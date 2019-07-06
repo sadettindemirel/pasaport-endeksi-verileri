@@ -1,0 +1,138 @@
+---
+title: "Pasaport Endeksi Verisi"
+output: html_notebook
+---
+
+```{r}
+library("rvest")
+library("tidyverse")
+library("dplyr")
+library("janitor")
+library("lubridate")
+library("RColorBrewer")
+#verilerde yer alan türkçe karakterler için
+Sys.setlocale("LC_CTYPE", "english")
+windowsFonts("Proxima Nova" = windowsFont("Proxima Nova"))
+```
+
+
+Öncelikle linki temizleyelim
+```{r}
+plink <- read_html("https://www.passportindex.org/byHistoric.php")
+```
+
+veriyi aşağıdaki kod yardımıyle çektik
+
+```{r}
+passport_table<- plink %>% html_node("table") %>% html_table(fill = TRUE)
+view(passport_table)
+```
+
+
+düzenleyelim
+
+```{r}
+düzenli_isim <- c("bos","ülke","2019_MS_Rank","2018_MS_Rank","2017_MS_Rank","2016_MS_Rank","2015_MS_Rank")
+colnames(passport_table)<- düzenli_isim
+View(passport_table)
+```
+
+temizleyelim
+
+```{r}
+passport_tidy <- passport_table %>% select(-1) %>% filter(!(ülke =="Share current view"))
+View(passport_tidy)
+```
+
+```{r}
+pp_tidy <- readRDS("C:/Users/Sadettin/Rstats/passport-index/pp_tidy.rds")
+```
+
+```{r}
+pp_tidy
+```
+
+Şimdi veriyi biraz yoğuralım
+```{r}
+pp_tidy1 <- pp_tidy %>% gather(indicator, deger, -ülke) %>%
+  separate(indicator, c("gosterge","yil")) %>% 
+  mutate(gosterge = recode(gosterge,"ms"="hareketlilik_skor", 
+                           "rank"="sıralama"))
+
+View(pp_tidy1)
+```
+
+```{r}
+pp_tidy1
+```
+
+```{r}
+pp_tidy1 %>% filter(gosterge == "hareketlilik_skor") %>% top_n(100, ülke) %>% ggplot(aes(fct_reorder(ülke,deger),deger, fill = gosterge))+geom_col()+ facet_wrap(~yil) + coord_flip()
+```
+
+
+```{r}
+pp_tidy1 %>% filter(gosterge == "hareketlilik_skor")
+```
+
+```{r}
+pp_tidy2 <- readRDS("C:/Users/Sadettin/Rstats/passport-index/pp_tidy2.rds")
+pp_tidy2
+```
+
+Temayı belirleyelim
+
+```{r}
+theme_custom1 <- function() {
+  theme_minimal() +
+    theme(
+      text = element_text(family = "Proxima Nova", color = "gray25"),
+      plot.title = element_text(face = "bold",size = 14),
+      plot.subtitle = element_text(size = 13),
+      axis.text.x= element_text(size=11),
+      axis.text.y = element_text(size=11),
+      plot.caption = element_text(size = 11, color = "gray30"),
+      plot.background = element_rect(fill = "#f6f5f5"),
+      legend.position = "none",
+      strip.background = element_rect(colour = "#d9d9d9", fill = "#d9d9d9"),
+      strip.text.x = element_text(size = 11, colour = "gray25", face = "bold"))
+  
+}
+```
+
+
+
+```{r}
+pp_tidy2 %>% filter(gosterge == "hareketlilik_skor") %>% top_n(200, ülke) %>% ggplot(aes(fct_reorder(ülke,deger, .desc = FALSE), year)) +geom_tile(aes(fill = deger))+coord_flip()+ theme_custom1()+scale_fill_distiller(palette = "RdBu") 
+```
+
+
+
+```{r}
+pp_tidy2 %>% 
+  filter(gosterge == "hareketlilik_skor") %>% 
+  top_n(200, ülke) %>% 
+  ggplot(aes(fct_reorder(ülke,deger, .desc = FALSE),year))+
+  geom_tile(aes(fill = deger), color = "white")+
+  scale_fill_gradient2(low = "#fc8d59", mid ="#ffffbf", high ="#91cf60", midpoint = 100)+coord_flip()+theme_custom1()+geom_text(aes(x=ülke, y=year, label =deger),size = 3.8,color= "gray25")+labs(x ="",y="",title = "Pasaport Endeksi Hareketlilik Skoru",subtitle = "kaynak: pasaportindex.org")
+```
+
+Verileri Barchart Race için düzenleyelim
+```{r}
+pp_bcr_skor <- pp_tidy2 %>% filter(gosterge == "hareketlilik_skor")%>% select(1,4,5) %>% spread(year, deger)
+write_csv(pp_bcr_skor,"C:/Users/Sadettin/Rstats/passport-index/pp_skor.csv")
+pp_bcr_skor
+```
+
+
+
+```{r}
+pp_bcr_siralama <- pp_tidy2 %>% 
+  filter(gosterge == "siralama") %>% 
+  select(1,4,5) %>%
+  spread(year, deger)
+
+write_csv(pp_bcr_siralama,"C:/Users/Sadettin/Rstats/passport-index/pp_siralama.csv")
+
+pp_bcr_siralama
+```

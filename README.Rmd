@@ -1,0 +1,40 @@
+---
+title: "Pasaport Endeksi Verileri"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Veri Seti Hakkında
+
+Pasaport Endeks verisi 2015 - 2019 yıllarını kapsamaktadır. Verisetinde iki temel gösterge vardır.
+
+**hareketlilik skoru** : Pasaportun diğer ülkelere seyahatteki esnekliği (yüksek puan = daha iyi skor)
+
+**sıralama** : Sıralama ise alınan hareketlilik skoruna göre değişmektedir.
+
+Aşağıdaki tabloda *year* sütunu *yil*'ın sadeleştirilmiş halidir.
+
+```{r pressure, echo=FALSE}
+pp_tidy <- readRDS("C:/Users/Sadettin/Rstats/passport-index/pp_tidy.rds")
+pp_tidy2 <- readRDS("C:/Users/Sadettin/Rstats/passport-index/pp_tidy2.rds")
+```
+
+
+```{r}
+head(pp_tidy2,10)
+```
+
+**Pasaportların Hareketlilik Skorlarının Görselleştirilmiş Hali**
+
+![Caption for the picture.](/Users/Sadettin/Rstats/passport-index/pasaport_viz2.png)
+
+
+
+
+
+
+
+
