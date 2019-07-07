@@ -32,5 +32,4 @@ head(pp_tidy2,10)
 
 **Pasaportların Hareketlilik Skorlarının Görselleştirilmiş Hali**
 
-![Caption for the
-picture.](/Users/Sadettin/Rstats/passport-index/pasaport_viz2.png)
+![](https://github.com/sadettindemirel/pasaport-endeksi-verileri/blob/master/pasaport_viz2.png?raw=true)
