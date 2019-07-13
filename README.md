@@ -12,6 +12,8 @@ iki temel gösterge vardır:
 **sıralama** : Sıralama ise alınan hareketlilik skoruna göre
 değişmektedir.
 
+*[veri kazımada kullanılan kodlar](https://sadettindemirel.github.io/pasaport-endeksi-verileri/veri-cekme-analiz.nb.html)*
+
 Aşağıdaki tabloda *year* sütunu *yil*’ın sadeleştirilmiş halidir.
 
 ``` r
