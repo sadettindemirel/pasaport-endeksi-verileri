@@ -3,7 +3,7 @@ Pasaport Endeksi Verileri
 
 ### Veri Seti Hakkında
 
-Pasaport Endeks verisi 2015 - 2019 yıllarını kapsamaktadır. Veriler [pasaportindex.org'dan kazınmıştır](https://www.passportindex.org/comparebyPassport.php). Verisetinde
+Pasaport Endeks verisi 2015 - 2019 yıllarını kapsamaktadır. Veriler [pasaportindex.org'dan kazınmıştır](https://www.passportindex.org/byHistoric.php). Verisetinde
 iki temel gösterge vardır:
 
 **hareketlilik skoru** : Pasaportun diğer ülkelere seyahatteki esnekliği
